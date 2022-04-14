@@ -15,6 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: PR Updater
-      uses: cyeragit/pr-updater-action@1.0.0
+      uses: cyeragit/pr-updater-action
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
+        base_branch: develop
