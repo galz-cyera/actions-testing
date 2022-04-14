@@ -6,6 +6,8 @@ on:
     branches:
       - develop
 
+permissions:
+  pull-requests: write
 
 name: PR auto update
 
