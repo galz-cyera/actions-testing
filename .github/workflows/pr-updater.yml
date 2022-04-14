@@ -10,11 +10,12 @@ on:
 name: PR auto update
 
 jobs:
-  build:
+  pr_update:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: PR Updater
-      uses: cyeragit/pr-updater-action@1.0.0
+      uses: cyeragit/pr-updater-action@master
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
+        base_branch: develop
