@@ -6,7 +6,7 @@ on:
     branches:
       - develop
 
-permissions: write-all
+
 
 
 name: PR auto update
