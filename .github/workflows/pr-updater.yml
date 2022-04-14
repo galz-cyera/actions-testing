@@ -6,9 +6,8 @@ on:
     branches:
       - develop
 
-permissions:
-  pull-requests: write
-  repository-projects: read
+permissions: write-all
+
 
 name: PR auto update
 
