@@ -16,8 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - id: set-pr-number
+      run: |
+        if $IS_PR ; then
+            echo '::set-output name=pr_number::${{ github.event.number }}'
+          else
+            echo '::set-output name=pr_number::""'
+          fi
+      env:
+        IS_PR: ${{ github.event.action }}
     - name: PR Updater
       uses: cyeragit/pr-updater-action@master
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         base_branch: develop
+        pr_number: ${{ steps.set-pr-number.outputs.pr_number }}
