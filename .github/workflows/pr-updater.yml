@@ -20,9 +20,9 @@ jobs:
       run: |
         if $IS_PR ; then
             echo '::set-output name=pr_number::${{ github.event.number }}'
-          else
+        else
             echo '::set-output name=pr_number::""'
-          fi
+        fi
       env:
         IS_PR: "${{ github.event.action }}"
     - name: PR Updater
