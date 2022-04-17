@@ -21,7 +21,7 @@ jobs:
         if [ "$IS_PR" == "auto_merge_enabled" ]; then
             echo '::set-output name=pr_number::${{ github.event.number }}'
         else
-            echo '::set-output name=pr_number::""'
+            echo '::set-output name=pr_number::'
         fi
       env:
         IS_PR: "${{ github.event.action }}"
