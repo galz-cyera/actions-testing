@@ -24,7 +24,7 @@ jobs:
             echo '::set-output name=pr_number::""'
           fi
       env:
-        IS_PR: ${{ github.event.action }}
+        IS_PR: "${{ github.event.action }}"
     - name: PR Updater
       uses: cyeragit/pr-updater-action@master
       with:
