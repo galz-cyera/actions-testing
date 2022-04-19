@@ -25,6 +25,6 @@ jobs:
     - name: PR Updater
       uses: cyeragit/pr-updater-action@master
       with:
-        token: "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"
+        token: "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"
         base_branch: develop
         current_pr_number: ${{ steps.set-pr-number.outputs.pr_number }}
