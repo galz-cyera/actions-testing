@@ -25,14 +25,17 @@ jobs:
     needs:
       - run_e2e
     if: steps.run_e2e.outcome != 'success'
-    - run: |    
-        arr=( $(gh api -H "Accept: application/vnd.github.v3+json" /repos/cyeragit/cyera/pulls/2009/reviews | jq -c '.[] | select(.state == "APPROVED")' | jq .id) )
-        for id in ${arr[@]}
-        do
-          gh api --method PUT \
-          -H "Accept: application/vnd.github.v3+json" \
-          /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews/$id/dismissals
-          -f message='Removed review due to failed E2E tests'
-        done
-      env:
-        GITHUB_TOKEN: "${{ secrets.PR_UPDATER_TOKEN }}"
+    steps:
+      - name: execute
+        env:
+          GITHUB_TOKEN: "${{ secrets.PR_UPDATER_TOKEN }}"
+        run: |    
+          arr=( $(gh api -H "Accept: application/vnd.github.v3+json" /repos/cyeragit/cyera/pulls/2009/reviews | jq -c '.[] | select(.state == "APPROVED")' | jq .id) )
+          for id in ${arr[@]}
+          do
+            gh api --method PUT \
+            -H "Accept: application/vnd.github.v3+json" \
+            /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews/$id/dismissals
+            -f message='Removed review due to failed E2E tests'
+          done
+
