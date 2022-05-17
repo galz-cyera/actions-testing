@@ -1,0 +1,17 @@
+name: Testing End to End
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+  workflow_call:
+  
+jobs:
+  run_tests:
+    name: End to End Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          exit 1

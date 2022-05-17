@@ -18,24 +18,21 @@ jobs:
   run_e2e:
     continue-on-error: true
     if: github.event.review.state == 'approved'
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          exit 1
+    uses: ./.github/workflows/testing-e2e.yml
+    secrets: inherit
   check_failures:
     runs-on: ubuntu-latest
     needs:
       - run_e2e
-    if: |
-      always() &&
-      steps.run_e2e.outcome != 'success' &&
-      needs.run_e2e.result != 'skipped'
-    steps:
-      - run: |
+    if: steps.run_e2e.outcome != 'success'
+    - run: |    
+        arr=( $(gh api -H "Accept: application/vnd.github.v3+json" /repos/cyeragit/cyera/pulls/2009/reviews | jq -c '.[] | select(.state == "APPROVED")' | jq .id) )
+        for id in ${arr[@]}
+        do
           gh api --method PUT \
           -H "Accept: application/vnd.github.v3+json" \
-          /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews
-          -f state='PENDING'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE: ${{ github.event.issue.html_url }}
+          /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews/$id/dismissals
+          -f message='Removed review due to failed E2E tests'
+        done
+      env:
+        GITHUB_TOKEN: "${{ secrets.PR_UPDATER_TOKEN }}"
