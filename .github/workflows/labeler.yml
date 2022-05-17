@@ -30,11 +30,12 @@ jobs:
       always() &&
       steps.run_e2e.outcome != 'success' &&
       needs.run_e2e.result != 'skipped'
-    - run: |
-        gh api --method PUT \
-        -H "Accept: application/vnd.github.v3+json" \
-        /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews
-        -f state='PENDING'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ISSUE: ${{ github.event.issue.html_url }}
+    steps:
+      - run: |
+          gh api --method PUT \
+          -H "Accept: application/vnd.github.v3+json" \
+          /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews
+          -f state='PENDING'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.html_url }}
