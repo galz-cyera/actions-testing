@@ -17,6 +17,7 @@ on:
 jobs:
   run_e2e:
     continue-on-error: true
+    runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
       - run: |
