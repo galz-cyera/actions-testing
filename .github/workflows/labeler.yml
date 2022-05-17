@@ -1,4 +1,4 @@
-name: Label PRs
+name: Run E2E
 
 on:
   pull_request_review:
@@ -7,10 +7,34 @@ on:
       - main
     types:
       - submitted
+  push:
+    branches:
+      - gh-readonly-queue/develop/**
+      - gh-readonly-queue/main/**
 
+# Reruns a check (E2E tests) if all the commits since the last check run
+# were commit merges from develop
 jobs:
-  test:
+  run_e2e:
+    continue-on-error: true
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          exit 1
+  check_failures:
+    runs-on: ubuntu-latest
+    needs:
+      - run_e2e
+    if: |
+      always() &&
+      steps.run_e2e.outcome != 'success' &&
+      needs.run_e2e.result != 'skipped'
     - run: |
-        echo "gal"
+        gh api --method PUT \
+        -H "Accept: application/vnd.github.v3+json" \
+        /repos/cyeragit/cyera/pulls/${{ github.event.number }}/reviews
+        -f state='PENDING'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUE: ${{ github.event.issue.html_url }}
