@@ -18,8 +18,9 @@ jobs:
   run_e2e:
     continue-on-error: true
     if: github.event.review.state == 'approved'
-    uses: ./.github/workflows/testing-e2e.yml@feature/test_1
-    secrets: inherit
+    steps:
+      - run: |
+          exit 1
   check_failures:
     runs-on: ubuntu-latest
     needs:
