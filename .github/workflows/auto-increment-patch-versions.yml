@@ -1,0 +1,41 @@
+name: Increment version
+
+on:
+  push:
+    branches:
+      - "pov/batch-[0-9]+"
+    paths-ignore:
+      - ".github/**"
+
+
+jobs:
+  create_tag:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PAT_GITHUB }}
+        fetch-depth: '0'
+    - name: Get old version
+      id: get_old_version
+      run: |
+        echo "::set-output name=old_version::$(cat aws-s3-scanner/package.json | jq .version)"
+    - name: Bump version and push tag
+      env:
+        GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+      run: |
+        lerna version patch --message "New patch version [skip ci]" --yes
+    - name: Get new version
+      id: get_new_version
+      run: |
+        echo "::set-output name=new_version::$(cat aws-s3-scanner/package.json | jq .version)"
+    - name: Post to a Slack channel
+      id: slack
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        channel-id: ${{ secrets.SLACK_VERSIONING_CHANNEL_ID }}
+        slack-message: "New version is released! \n
+                        Old tag - `${{ steps.get_old_version.outputs.old_version }}`\n
+                        New tag - `${{ steps.get_new_version.outputs.new_version }}`"
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

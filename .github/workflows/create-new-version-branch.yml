@@ -1,0 +1,38 @@
+name: Create new version branch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_branch:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT_GITHUB }}
+          fetch-depth: '0'
+      - name: Get old version
+        id: get_old_version
+        run: |
+          echo "::set-output name=old_version::$(cat aws-s3-scanner/package.json | jq .version)"
+          echo "::set-output name=old_minor_version::$(cut -d '.' -f 2 <<< $(cat aws-s3-scanner/package.json | jq -r .version))"
+      - name: Create new branch
+        id: create_new_branch
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+        run: |
+          git checkout -b pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}
+      - name: Bump version and push tag
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+        run: |
+          git push -u
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: ${{ secrets.SLACK_VERSIONING_CHANNEL_ID }}
+          slack-message: "New version branch was created! \n
+                          `pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}`"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
