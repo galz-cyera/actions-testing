@@ -26,7 +26,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
-          git push -u
+          git push --set-upstream origin pov/batch-8
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.19.0
