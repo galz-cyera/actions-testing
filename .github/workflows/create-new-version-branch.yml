@@ -11,6 +11,13 @@ jobs:
         with:
           token: ${{ secrets.PAT_GITHUB }}
           fetch-depth: '0'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.14
+      - name: install
+        run: |
+          npm install
+          npm install -g lerna
       - name: Get old version
         id: get_old_version
         run: |
@@ -26,4 +33,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
-          git push --set-upstream origin pov/batch-8
+          lerna version minor --no-push --no-git-tag-version --message "New patch version [skip ci]" --yes
+          git push --set-upstream origin pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}
