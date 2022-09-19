@@ -27,12 +27,3 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           git push --set-upstream origin pov/batch-8
-      - name: Post to a Slack channel
-        id: slack
-        uses: slackapi/slack-github-action@v1.19.0
-        with:
-          channel-id: ${{ secrets.SLACK_VERSIONING_CHANNEL_ID }}
-          slack-message: "New version branch was created! \n
-                          `pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}`"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
