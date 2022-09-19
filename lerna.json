@@ -1,0 +1,19 @@
+{
+  "packages": [
+    "libs/*",
+    "./*"
+  ],
+  "hoist": true,
+  "strict": true,
+  "version": "0.8.0-dev.0",
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--legacy-peer-deps"
+      ],
+      "nohoist": [
+        "axios"
+      ]
+    }
+  }
+}
