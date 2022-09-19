@@ -33,4 +33,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
-          lerna version minor --git-remote pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} --no-git-tag-version --message "New patch version [skip ci]" --yes
+          lerna version minor --git-remote pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} --message "New version [skip ci]" --yes
