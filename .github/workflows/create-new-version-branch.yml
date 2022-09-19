@@ -33,5 +33,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
-          lerna version minor --no-push --no-git-tag-version --message "New patch version [skip ci]" --yes
-          git push --set-upstream origin pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}
+          lerna version minor --git-remote pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} --no-git-tag-version --message "New patch version [skip ci]" --yes
