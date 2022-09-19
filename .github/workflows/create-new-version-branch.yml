@@ -39,4 +39,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
+          git branch ${{ github.ref_name }}
           lerna version preminor --no-git-tag-version --message "New version [skip ci]" --yes
