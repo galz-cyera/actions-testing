@@ -36,7 +36,7 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          lerna version minor --message "New version branch pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} was created" [skip ci]" --yes
+          lerna version minor --message "New version branch pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} was created [skip ci]" --yes
       - name: Bump version on develop
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
