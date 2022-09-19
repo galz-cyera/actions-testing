@@ -29,8 +29,14 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           git checkout -b pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}
-      - name: Bump version and push tag
+          git push --set-upstream origin pov/batch-${{ steps.get_old_version.outputs.old_minor_version }}
+      - name: Bump version and push tag on pov branch
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           lerna version minor --message "New version [skip ci]" --yes
+      - name: Bump version on develop
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+        run: |
+          lerna version preminor --no-git-tag-version --message "New version [skip ci]" --yes
