@@ -34,10 +34,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
-          lerna version minor --message "New version [skip ci]" --yes
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          lerna version minor --message "New version branch pov/batch-${{ steps.get_old_version.outputs.old_minor_version }} was created" [skip ci]" --yes
       - name: Bump version on develop
         env:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           git branch ${{ github.ref_name }}
-          lerna version preminor --no-git-tag-version --message "New version [skip ci]" --yes
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          lerna version preminor --no-git-tag-version --message "New version was tagged %s [skip ci]" --yes
